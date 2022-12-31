@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+START=1OO
+
+stop_ttl() {
+	iptables-save | grep -v "\[TTL-Tools\] --ttl-set" | iptables-restore
+}
+
+stop() {
+	stop_ttl
+}
+
+start_ttl() {
+	if [ $(uci get ttl-tools.@ttl[0].enable) -eq 1 ]; then
+		interface=$(uci get ttl-tools.@ttl[0].interface)
+		ttlset=$(uci get ttl-tools.@ttl[0].ttlset)
+		iptables -t mangle -I POSTROUTING -o $interface -m comment --comment "[TTL-Tools] --ttl-set" -j TTL --ttl-set $ttlset
+	fi
+}
+
+start() {
+	start_ttl
+}
+
+ 
+restart_ttl(){
+	stop_ttl
+	start_ttl
+}
+
+restart(){
+	restart_ttl
+}
+
+boot(){
+	start
+}

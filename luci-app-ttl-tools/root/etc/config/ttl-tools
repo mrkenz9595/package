@@ -1,0 +1,4 @@
+config ttl
+        option ttlset '65'
+        option interface 'eth1'
+        option enable '0'

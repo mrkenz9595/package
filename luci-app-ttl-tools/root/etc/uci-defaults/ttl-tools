@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@ttl-tools[-1]
+	add ucitrack ttl-tools
+	set ucitrack.@ttl-tools[-1].init=ttl-tools
+	commit ucitrack
+EOF
+
+rm -rf /tmp/luci-*
+exit 0
